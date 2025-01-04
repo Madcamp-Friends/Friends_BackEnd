@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     private final MemberService memberService;
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String nickname, @RequestParam String password) {
-        boolean success=memberService.login(nickname, password);
-        if(success) {
-            return ResponseEntity.ok("Welcome");
-        }
-        else{
-            return ResponseEntity.status(401).body("Invalid name or password");
-        }
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestParam String nickname, @RequestParam String password) {
+//        boolean success=memberService.login(nickname, password);
+//        if(success) {
+//            return ResponseEntity.ok("Welcome");
+//        }
+//        else{
+//            return ResponseEntity.status(401).body("Invalid name or password");
+//        }
+//    }
 
     @PostMapping("/create-account")
     public ResponseEntity<String> createAccount(
