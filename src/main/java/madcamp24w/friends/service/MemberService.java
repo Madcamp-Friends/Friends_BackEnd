@@ -1,5 +1,6 @@
 package madcamp24w.friends.service;
 
+import lombok.RequiredArgsConstructor;
 import madcamp24w.friends.entity.Member;
 import madcamp24w.friends.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -7,12 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class MemberService {
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
+
 
     public boolean login(String nickname, String password) {
         Optional<Member> member=memberRepository.findByNickname(nickname);
@@ -28,8 +28,12 @@ public class MemberService {
         if(existingMember2.isPresent()){
             throw new IllegalArgumentException("Email already registered");
         }
-        Member newMember=new Member({nickname, email, password});
-        await newMember.save();
+        Member newMember=Member.builder()
+                .nickname(nickname)
+                .email(email)
+                .password(password)
+                .build();
+
         memberRepository.save(newMember);
     }
 }
