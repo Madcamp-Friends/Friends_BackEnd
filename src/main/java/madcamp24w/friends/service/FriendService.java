@@ -12,7 +12,5 @@ import java.util.List;
 public class FriendService {
 
     private MemberRepository memberRepository;
-    public void getAllMemberExceptMe(){
-        List<Member>
-    }
+
 }
