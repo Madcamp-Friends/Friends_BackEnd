@@ -20,28 +20,17 @@ public class MemberService {
         return member.isPresent() && member.get().getPassword().equals(password);
     }
 
-    public void createAccount(MemberRegisterDTO dto) {
-        Optional<Member> existingMember=memberRepository.findByNickname(dto.getNickname());
-        Optional<Member> existingMember2=memberRepository.findByEmail(dto.getEmail());
-        String pw1 = dto.getPassword();
-        String pw2 = dto.getPasswordCheck();
-
+    public void createAccount(String nickname, String email, String password) {
+        Optional<Member> existingMember=memberRepository.findByNickname(nickname);
+        Optional<Member> existingMember2=memberRepository.findByEmail(email);
         if(existingMember.isPresent()){
             throw new IllegalArgumentException("Nickname already registered");
         }
         if(existingMember2.isPresent()){
             throw new IllegalArgumentException("Email already registered");
         }
+        Member newMember = new Member(nickname, email, password);
 
-        else if (pw1.equals(pw2)){
-            pw1 = bCryptPasswordEncoder.encode(pw1);
-            Member member = Member.builder()
-                    .email(dto.getEmail())
-                    .nickname(dto.getNickname())
-                    .password(pw1)
-                    .build();
-
-            memberRepository.save(member);
-        }
+        memberRepository.save(newMember);
     }
 }

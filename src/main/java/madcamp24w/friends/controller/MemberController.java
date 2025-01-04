@@ -27,9 +27,11 @@ public class MemberController {
 
     @PostMapping("/create-account")
     public ResponseEntity<String> createAccount(
-            @RequestBody MemberRegisterDTO dto) {
+            @RequestParam String nickname,
+            @RequestParam String email,
+            @RequestParam String password) {
         try{
-            memberService.createAccount(dto);
+            memberService.createAccount(nickname, email, password);
             return ResponseEntity.ok("Account created");
         }catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
