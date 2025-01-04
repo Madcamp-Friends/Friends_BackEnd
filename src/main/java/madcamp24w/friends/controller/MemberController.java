@@ -1,6 +1,7 @@
 package madcamp24w.friends.controller;
 
 import lombok.RequiredArgsConstructor;
+import madcamp24w.friends.DTO.MemberRegisterDTO;
 import madcamp24w.friends.entity.Member;
 import madcamp24w.friends.service.MemberService;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +27,9 @@ public class MemberController {
 
     @PostMapping("/create-account")
     public ResponseEntity<String> createAccount(
-            @RequestParam String nickname,
-            @RequestParam String email,
-            @RequestParam String password) {
+            @RequestBody MemberRegisterDTO dto) {
         try{
-            memberService.createAccount(nickname, email, password);
+            memberService.createAccount(dto);
             return ResponseEntity.ok("Account created");
         }catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
