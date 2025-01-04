@@ -16,8 +16,8 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public boolean login(String nickname, String password) {
-        Optional<Member> member=memberRepository.findByNickname(nickname);
-        return member.isPresent() && member.get().getPassword().equals(password);
+        Member member = memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        return bCryptPasswordEncoder.matches(password, member.getPassword());
     }
 
     public void createAccount(MemberRegisterDTO dto) {
