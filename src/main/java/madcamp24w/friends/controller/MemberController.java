@@ -1,5 +1,4 @@
 package madcamp24w.friends.controller;
-
 import lombok.RequiredArgsConstructor;
 
 import madcamp24w.friends.DTO.ErrorResponseDTO;
@@ -16,6 +15,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
+@RequestMapping("/api/auth")
 public class MemberController {
 
     private final MemberRepository memberRepository;
@@ -25,6 +25,7 @@ public class MemberController {
     public ResponseEntity<String> login(@RequestParam String nickname, @RequestParam String password) {
         boolean success = memberService.login(nickname, password);
         if (success) {
+            memberService.loginChecked(nickname);
             return ResponseEntity.ok("Welcome");
         } else {
             return ResponseEntity.status(401).body("Invalid name or password");
@@ -55,4 +56,7 @@ public class MemberController {
             );
             return ResponseEntity.badRequest().body(errorResponse);
 
+
         }
+    }
+}
