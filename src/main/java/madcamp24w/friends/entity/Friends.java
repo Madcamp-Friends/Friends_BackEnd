@@ -1,13 +1,11 @@
 package madcamp24w.friends.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +17,7 @@ public class Friends {
     @Column
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name="friend_status")
     private FriendStatus status;
 
