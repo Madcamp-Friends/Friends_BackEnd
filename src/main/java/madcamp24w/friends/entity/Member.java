@@ -1,16 +1,14 @@
 package madcamp24w.friends.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,6 +25,8 @@ public class Member {
     private String email;
     @Column
     private String password;
+    @Column
+    private Integer log;
 
     // 해당 사용자가 친구 관계의 주체인 경우의 목록
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -36,10 +36,11 @@ public class Member {
     @OneToMany(mappedBy = "friend", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friends> friendOfList = new ArrayList<>();
 
-    public Member(String nickname, String email, String password){
+    public Member(String nickname, String email, String password, Integer log) {
         this.email=email;
         this.nickname=nickname;
         this.password=password;
+        this.log=log;
     }
 
 }

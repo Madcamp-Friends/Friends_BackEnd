@@ -8,4 +8,5 @@ public class MemberRegisterDTO {
     private String email;
     private String password;
     private String passwordCheck;
+    private Integer log;
 }

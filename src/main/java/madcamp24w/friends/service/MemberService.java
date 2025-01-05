@@ -19,6 +19,16 @@ public class MemberService {
         Member member = memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
         return bCryptPasswordEncoder.matches(password, member.getPassword());
     }
+    public void loginChecked(String nickname){
+        Member member=memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        member.setLog(1);
+        memberRepository.save(member);
+    }
+
+    public Member bring(String nickname){
+        Member member=memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        return member;
+    }
 
     public void createAccount(MemberRegisterDTO dto) {
         Optional<Member> existingMember=memberRepository.findByNickname(dto.getNickname());
@@ -42,5 +52,11 @@ public class MemberService {
                     .build();
             memberRepository.save(member);
         }
+    }
+
+    public void Logout(String nickname){
+        Member member=memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        member.setLog(0);
+        memberRepository.save(member);
     }
 }
