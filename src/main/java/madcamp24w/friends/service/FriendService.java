@@ -39,11 +39,10 @@ public class FriendService {
         Member fromMember = memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("Does not exist"));
         Member toMember = memberRepository.findById(dto.getToId()).orElseThrow(()->new IllegalArgumentException("Does not exist"));
 
-        if (friendRepository.existsByMemberAndFriend(fromMember, toMember)){
-            Friends friend = friendRepository.findFriendsByMemberAndFriend(fromMember, toMember);
-            friend.setStatus(FriendStatus.FRIEND);
-            friendRepository.save(friend);
-        }
+        Friends friend = friendRepository.findFriendshipBetweenMembers(fromMember.getId(), toMember.getId()).orElseThrow(() -> new IllegalArgumentException("No pending friendship exists"));
+        friend.setStatus(FriendStatus.FRIEND);
+        friendRepository.save(friend);
+
     }
 
     public void becomeNoFriend(FriendRequestDTO dto, HttpSession session){
@@ -56,7 +55,8 @@ public class FriendService {
             friend.setStatus(FriendStatus.REJECTED);
             friendRepository.save(friend);
         }
-
     }
+
+
 
 }
