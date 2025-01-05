@@ -52,6 +52,9 @@ public class MemberService {
                     .build();
             memberRepository.save(member);
         }
+        else{
+            throw new IllegalArgumentException("Wrong password");
+        }
     }
 
     public void Logout(String nickname){
