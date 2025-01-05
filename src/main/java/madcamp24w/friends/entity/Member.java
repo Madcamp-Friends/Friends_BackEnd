@@ -36,11 +36,11 @@ public class Member {
     @OneToMany(mappedBy = "friend", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friends> friendOfList = new ArrayList<>();
 
-    public Member(String nickname, String email, String password, Integer log) {
+    public Member(String nickname, String email, String password) {
         this.email=email;
         this.nickname=nickname;
         this.password=password;
-        this.log=log;
+        this.log=0;
     }
 
 }

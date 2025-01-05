@@ -19,6 +19,7 @@ public class Friends {
     @Column
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name="friend_status")
     private FriendStatus status;
 
