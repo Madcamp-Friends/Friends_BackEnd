@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class FriendRequestDTO {
-    private Long fromId;
+    //private Long fromId;
     private Long toId;
 }

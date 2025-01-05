@@ -1,5 +1,6 @@
 package madcamp24w.friends.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import madcamp24w.friends.DTO.ErrorResponseDTO;
 import madcamp24w.friends.DTO.FriendRequestDTO;
@@ -17,9 +18,9 @@ public class FriendController {
     private final FriendService friendService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createFriendship(@RequestBody FriendRequestDTO dto){
+    public ResponseEntity<?> createFriendship(@RequestBody FriendRequestDTO dto, HttpSession session){
         try{
-            friendService.createFriendship(dto);
+            friendService.createFriendship(dto, session);
             return ResponseEntity.ok().body("친구관게 신청 완료");
         } catch (Exception e){
             ErrorResponseDTO errorResponse = new ErrorResponseDTO(
@@ -31,9 +32,9 @@ public class FriendController {
     }
 
     @PostMapping("/toFriend")
-    public ResponseEntity<?> updateFriendship(@RequestBody FriendRequestDTO dto){
+    public ResponseEntity<?> updateFriendship(@RequestBody FriendRequestDTO dto, HttpSession session){
         try{
-            friendService.becomeFriend(dto);
+            friendService.becomeFriend(dto, session);
             return ResponseEntity.ok().body("친구관게 성립완료");
         } catch (Exception e){
             return null;
@@ -41,9 +42,9 @@ public class FriendController {
     }
 
     @PostMapping("/noFriend")
-    public ResponseEntity<?> rejectFriendship(@RequestBody FriendRequestDTO dto){
+    public ResponseEntity<?> rejectFriendship(@RequestBody FriendRequestDTO dto, HttpSession session){
         try{
-            friendService.becomeNoFriend(dto);
+            friendService.becomeNoFriend(dto, session);
             return ResponseEntity.ok().body("친구관게 정리 끝냄 완료");
         } catch (Exception e){
             return null;

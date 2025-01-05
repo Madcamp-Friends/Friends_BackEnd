@@ -9,6 +9,7 @@ import madcamp24w.friends.entity.Member;
 import madcamp24w.friends.repository.MemberRepository;
 import madcamp24w.friends.service.MemberService;
 import org.aspectj.apache.bcel.Repository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,4 +75,18 @@ public class MemberController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/user/me")
+    public ResponseEntity<MemberInfoResponseDTO> getCurrentUser(HttpSession session) {
+        try {
+            String nickname = (String) session.getAttribute("nickname");
+            System.out.println("HEEJU get user" + nickname);
+            Member member = memberRepository.findByNickname(nickname).orElseThrow(()->new IllegalArgumentException("no member"));
+            MemberInfoResponseDTO result = MemberInfoResponseDTO.memberTOInfo(member);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 package madcamp24w.friends.service;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import madcamp24w.friends.DTO.FriendRequestDTO;
 import madcamp24w.friends.entity.FriendStatus;
@@ -16,8 +17,9 @@ import java.util.List;
 public class FriendService {
     private final MemberRepository memberRepository;
     private final FriendRepository friendRepository;
-    public void createFriendship(FriendRequestDTO dto){
-        Member fromMember = memberRepository.findById(dto.getFromId()).orElseThrow(()->new IllegalArgumentException("Does not exist"));
+    public void createFriendship(FriendRequestDTO dto, HttpSession session){
+        String nickname = (String) session.getAttribute("nickname");
+        Member fromMember = memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("Does not exist"));
         Member toMember = memberRepository.findById(dto.getToId()).orElseThrow(()->new IllegalArgumentException("Does not exist"));
 
         if (friendRepository.existsByMemberAndFriend(fromMember, toMember)){
@@ -32,8 +34,9 @@ public class FriendService {
         friendRepository.save(friends);
     }
 
-    public void becomeFriend(FriendRequestDTO dto){
-        Member fromMember = memberRepository.findById(dto.getFromId()).orElseThrow(()->new IllegalArgumentException("Does not exist"));
+    public void becomeFriend(FriendRequestDTO dto, HttpSession session){
+        String nickname = (String) session.getAttribute("nickname");
+        Member fromMember = memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("Does not exist"));
         Member toMember = memberRepository.findById(dto.getToId()).orElseThrow(()->new IllegalArgumentException("Does not exist"));
 
         if (friendRepository.existsByMemberAndFriend(fromMember, toMember)){
@@ -43,8 +46,9 @@ public class FriendService {
         }
     }
 
-    public void becomeNoFriend(FriendRequestDTO dto){
-        Member fromMember = memberRepository.findById(dto.getFromId()).orElseThrow(()->new IllegalArgumentException("Does not exist"));
+    public void becomeNoFriend(FriendRequestDTO dto, HttpSession session){
+        String nickname = (String) session.getAttribute("nickname");
+        Member fromMember = memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("Does not exist"));
         Member toMember = memberRepository.findById(dto.getToId()).orElseThrow(()->new IllegalArgumentException("Does not exist"));
 
         if (friendRepository.existsByMemberAndFriend(fromMember, toMember)){
