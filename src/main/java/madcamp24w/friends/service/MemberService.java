@@ -25,6 +25,11 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    public Member bring(String nickname){
+        Member member=memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        return member;
+    }
+
     public void createAccount(MemberRegisterDTO dto) {
         Optional<Member> existingMember=memberRepository.findByNickname(dto.getNickname());
         Optional<Member> existingMember2=memberRepository.findByEmail(dto.getEmail());
@@ -47,5 +52,11 @@ public class MemberService {
                     .build();
             memberRepository.save(member);
         }
+    }
+
+    public void Logout(String nickname){
+        Member member=memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        member.setLog(0);
+        memberRepository.save(member);
     }
 }

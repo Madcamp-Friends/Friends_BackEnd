@@ -1,4 +1,5 @@
 package madcamp24w.friends.controller;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 import madcamp24w.friends.DTO.ErrorResponseDTO;
@@ -7,6 +8,7 @@ import madcamp24w.friends.DTO.MemberRegisterDTO;
 import madcamp24w.friends.entity.Member;
 import madcamp24w.friends.repository.MemberRepository;
 import madcamp24w.friends.service.MemberService;
+import org.aspectj.apache.bcel.Repository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +24,11 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String nickname, @RequestParam String password) {
+    public ResponseEntity<String> login(@RequestParam String nickname, @RequestParam String password, HttpSession session) {
         boolean success = memberService.login(nickname, password);
         if (success) {
+            Member member=memberService.bring(nickname);
+            session.setAttribute("nickname",member.getNickname());
             memberService.loginChecked(nickname);
             return ResponseEntity.ok("Welcome");
         } else {
@@ -57,6 +61,17 @@ public class MemberController {
             return ResponseEntity.badRequest().body(errorResponse);
 
 
+        }
+    }
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        String nickname = (String) session.getAttribute("nickname");
+        try{
+            memberService.Logout(nickname);
+            session.invalidate();
+            return ResponseEntity.ok("안녕~");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
