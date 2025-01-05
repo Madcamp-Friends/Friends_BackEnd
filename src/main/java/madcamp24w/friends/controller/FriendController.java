@@ -20,6 +20,7 @@ public class FriendController {
     public ResponseEntity<?> createFriendship(@RequestBody FriendRequestDTO dto){
         try{
             friendService.createFriendship(dto);
+            return ResponseEntity.ok().body("친구관게 신청 완료");
         } catch (Exception e){
             ErrorResponseDTO errorResponse = new ErrorResponseDTO(
                     "Failed",
@@ -27,27 +28,26 @@ public class FriendController {
             );
             return ResponseEntity.badRequest().body(errorResponse);
         }
-        return null;
     }
 
     @PostMapping("/toFriend")
     public ResponseEntity<?> updateFriendship(@RequestBody FriendRequestDTO dto){
         try{
             friendService.becomeFriend(dto);
+            return ResponseEntity.ok().body("친구관게 성립완료");
         } catch (Exception e){
             return null;
         }
-        return null;
     }
 
     @PostMapping("/noFriend")
     public ResponseEntity<?> rejectFriendship(@RequestBody FriendRequestDTO dto){
         try{
             friendService.becomeNoFriend(dto);
+            return ResponseEntity.ok().body("친구관게 정리 끝냄 완료");
         } catch (Exception e){
             return null;
         }
-        return null;
     }
 
 

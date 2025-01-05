@@ -53,7 +53,6 @@ public class FriendService {
             friendRepository.save(friend);
         }
 
-
     }
 
 }
