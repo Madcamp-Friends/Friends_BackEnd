@@ -81,7 +81,7 @@ public class FriendController {
             for(Friends f : friends){
                 System.out.println("heeju Test "+ f.getFriend().getId()+" "+f.getFriend().getNickname()+" "+f.getMember().getId()+" "+f.getMember().getNickname());
             }
-            List<MemberInfoResponseDTO> result = MemberInfoResponseDTO.friendInfoResponseDTOList(friends);
+            List<MemberInfoResponseDTO> result = friendService.getAllFriends(session);//MemberInfoResponseDTO.friendInfoResponseDTOList(friends);
             return ResponseEntity.ok(result);
         } catch (Exception e){
             return null;
