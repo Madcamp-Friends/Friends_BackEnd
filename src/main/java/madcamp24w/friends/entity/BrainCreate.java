@@ -31,5 +31,6 @@ public class BrainCreate {
 
     public BrainCreate(String nickname) {
         this.nickname=nickname;
+        this.labels=new ArrayList<>();
     }
 }

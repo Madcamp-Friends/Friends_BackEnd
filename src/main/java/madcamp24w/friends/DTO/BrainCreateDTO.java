@@ -7,6 +7,6 @@ import java.util.List;
 
 @Getter
 public class BrainCreateDTO {
-    private String nickname;
+   // private String nickname;
     private ArrayList<String> labels;
 }

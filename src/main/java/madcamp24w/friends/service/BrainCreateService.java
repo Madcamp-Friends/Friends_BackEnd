@@ -22,7 +22,6 @@ public class BrainCreateService {
         }
         BrainCreate brain = BrainCreate.builder()
                 .nickname(nickname)
-                .labels(new ArrayList<>())
                 .build();
         brainCreateRepository.save(brain);
     }

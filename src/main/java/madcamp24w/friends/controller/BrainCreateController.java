@@ -6,6 +6,7 @@ import madcamp24w.friends.DTO.BrainCreateDTO;
 import madcamp24w.friends.DTO.MemberRegisterDTO;
 import madcamp24w.friends.entity.BrainCreate;
 import madcamp24w.friends.service.BrainCreateService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class BrainCreateController {
         String nickname=(String) session.getAttribute("nickname");
         if(nickname!=null){
             brainCreateService.createBrain(nickname);
-            return ResponseEntity.ok().body("Brain created");
+            return ResponseEntity.ok("brain created");
         }else{
             return ResponseEntity.badRequest().body("nickname error");
         }
@@ -43,12 +44,12 @@ public class BrainCreateController {
         brainCreateService.removeLabel(nickname, label);
     }
     @GetMapping("/{nickname}/labels")
-    public BrainCreate getlabel(HttpSession session) {
+    public ResponseEntity<?> getlabel(HttpSession session) {
         String nickname = (String) session.getAttribute("nickname");
         if(nickname!=null){
-            return brainCreateService.getBrain(nickname);
+            return ResponseEntity.ok(brainCreateService.getBrain(nickname));
         }else{
-            throw new IllegalArgumentException("nickname error");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("nickname error");
         }
     }
 }
