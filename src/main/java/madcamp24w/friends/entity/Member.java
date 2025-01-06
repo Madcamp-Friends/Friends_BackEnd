@@ -32,9 +32,12 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friends> friendsList = new ArrayList<>();
 
-    // 해당 사용자가 친구 관계의 대상인 경우의 목록
+    // 해당 사용자가 친구 관계의 대상인 경우의 목록, mappedby는 반대편 엔티티에 있는 필드명 ManyToOne의 필드 명
     @OneToMany(mappedBy = "friend", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friends> friendOfList = new ArrayList<>();
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private BrainCreate brain;
 
     public Member(String nickname, String email, String password) {
         this.email=email;

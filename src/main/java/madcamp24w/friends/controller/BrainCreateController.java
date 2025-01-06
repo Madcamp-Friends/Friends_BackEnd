@@ -3,39 +3,44 @@ package madcamp24w.friends.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import madcamp24w.friends.DTO.BrainCreateDTO;
+import madcamp24w.friends.DTO.BrainCreateResponseDTO;
 import madcamp24w.friends.DTO.MemberRegisterDTO;
 import madcamp24w.friends.entity.BrainCreate;
 import madcamp24w.friends.service.BrainCreateService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping("/brain")
 public class BrainCreateController {
 
     private final BrainCreateService brainCreateService;
 
     // Create a new brain
-    @PostMapping("/brain")
-    public ResponseEntity<?> createBrain(HttpSession session) {
+    @PostMapping("/create")
+    public ResponseEntity<BrainCreateResponseDTO> createBrain(@RequestBody BrainCreateDTO request, HttpSession session) {
         String nickname=(String) session.getAttribute("nickname");
         if(nickname!=null){
-            brainCreateService.createBrain(nickname);
-            return ResponseEntity.ok().body("Brain created");
+            BrainCreate brain = brainCreateService.createBrain(nickname, request);
+            BrainCreateResponseDTO result = BrainCreateResponseDTO.toBrainResponse(brain);
+            return ResponseEntity.ok(result);
         }else{
-            return ResponseEntity.badRequest().body("nickname error");
+            return null;
+            //return ResponseEntity.badRequest().body("nickname error");
         }
 
     }
 
 
     // Add a label to a brain
-    @PostMapping("/{brainnickname}/labels_add")
-    public void addlabel(@PathVariable String nickname, @RequestParam String label) {
-        brainCreateService.addLabel(nickname, label);
-    }
+//    @PostMapping("/{brainnickname}/labels_add")
+//    public void addlabel(@PathVariable String nickname, @RequestParam String label) {
+//        brainCreateService.addLabel(nickname, label);
+//    }
 
     // Remove a label from a brain
     @DeleteMapping("/{brainnickname}/labels_delete")

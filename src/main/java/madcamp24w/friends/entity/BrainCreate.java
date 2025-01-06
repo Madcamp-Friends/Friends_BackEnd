@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 @Entity
-@Table(name="brain_create")
+@Table(name="brain")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,10 +24,12 @@ public class BrainCreate {
     @Column
     private String nickname;
 
-    @ElementCollection
-    @CollectionTable(name="brain_labels", joinColumns = @JoinColumn(name="brain_id"))
-    @Column(name= "labels")
-    private List<String> labels=new ArrayList<>();
+    @OneToMany(mappedBy = "brain", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Label> labels = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     public BrainCreate(String nickname) {
         this.nickname=nickname;
