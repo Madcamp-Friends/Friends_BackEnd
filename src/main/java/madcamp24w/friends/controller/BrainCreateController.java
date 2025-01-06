@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping("/brain")
 public class BrainCreateController {
 
     private final BrainCreateService brainCreateService;
 
     // Create a new brain
-    @PostMapping("/brain")
+    @PostMapping("/create")
     public ResponseEntity<?> createBrain(HttpSession session) {
         String nickname=(String) session.getAttribute("nickname");
         if(nickname!=null){
