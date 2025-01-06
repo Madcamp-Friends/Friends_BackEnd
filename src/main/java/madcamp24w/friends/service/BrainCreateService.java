@@ -39,12 +39,14 @@ public class BrainCreateService {
                 .nickname(nickname)
                 .build();
 
+        brain = brainCreateRepository.save(brain);
 
         // 3. Label 리스트 생성 및 BrainCreate와 연관 설정
+        BrainCreate finalBrain = brain;
         List<Label> labels = dto.getLabelContent().stream()
                 .map(content -> Label.builder()
                         .labelName(content)
-                        .brain(brain) // BrainCreate와 관계 설정
+                        .brain(finalBrain) // BrainCreate와 관계 설정
                         .build())
                 .toList();
 
@@ -52,7 +54,7 @@ public class BrainCreateService {
         // labelRepository.saveAll(labels); // Label 저장
 
         brain.setLabels(labels); // Brain에 Label 리스트 설정
-        return brainCreateRepository.save(brain); // Brain 먼저 저장
+        return brain; // Brain 먼저 저장
 
     }
 
