@@ -3,6 +3,8 @@ package madcamp24w.friends.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import madcamp24w.friends.DTO.BrainCreateDTO;
+import madcamp24w.friends.DTO.BrainCreateResponseDTO;
+import madcamp24w.friends.DTO.LabelDTO;
 import madcamp24w.friends.entity.BrainCreate;
 import madcamp24w.friends.entity.Label;
 import madcamp24w.friends.entity.Member;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingDeque;
 
 @Service
 @RequiredArgsConstructor
@@ -54,9 +57,22 @@ public class BrainCreateService {
     }
 
     // Get a Brain by nickname
-    public BrainCreate getBrain(String nickname) {
-        return brainCreateRepository.findByNickname(nickname)
+    public List<LabelDTO> getBrain(String nickname) {
+        BrainCreate brain = brainCreateRepository.findByNickname(nickname)
                 .orElseThrow(() -> new IllegalArgumentException("Brain not found"));
+
+        List<Label> result = labelRepository.findAllByBrain_Id(brain.getId());
+        return LabelDTO.LabelInfo(result);
+
+    }
+
+    public List<LabelDTO> getFriendBrain(Long id) {
+        BrainCreate brain = brainCreateRepository.findByMemberId(id)
+                .orElseThrow(() -> new IllegalArgumentException("Brain not found"));
+
+        List<Label> result = labelRepository.findAllByBrain_Id(brain.getId());
+        return LabelDTO.LabelInfo(result);
+
     }
 
     // Add a label to a Brain
@@ -69,11 +85,11 @@ public class BrainCreateService {
     }*/
 
     // Remove a label from a Brain
-    @Transactional
-    public void removeLabel(String nickname, String label) {
-        BrainCreate brainCreate = getBrain(nickname);
-        if (brainCreate.getLabels().contains(label)) {
-            brainCreate.getLabels().remove(label);
-        }
-    }
+//    @Transactional
+//    public void removeLabel(String nickname, String label) {
+//        BrainCreate brainCreate = getBrain(nickname);
+//        if (brainCreate.getLabels().contains(label)) {
+//            brainCreate.getLabels().remove(label);
+//        }
+//    }
 }
