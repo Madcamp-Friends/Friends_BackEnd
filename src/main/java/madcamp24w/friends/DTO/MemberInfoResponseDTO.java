@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import madcamp24w.friends.entity.Friends;
 import madcamp24w.friends.entity.Member;
 
 import java.util.ArrayList;
@@ -28,6 +29,39 @@ public class MemberInfoResponseDTO {
         List<MemberInfoResponseDTO> dtos = new ArrayList<>();
         for (Member member: list){
             dtos.add(memberTOInfo(member));
+        }
+        return dtos;
+    }
+
+
+    public static MemberInfoResponseDTO FriendTOInfo(Friends friends){
+        return MemberInfoResponseDTO.builder()
+                .id(friends.getFriend().getId())
+                .nickname(friends.getFriend().getNickname())
+                .build();
+    }
+
+
+    public static List<MemberInfoResponseDTO> friendInfoResponseDTOList(List<Friends> list){
+        List<MemberInfoResponseDTO> dtos = new ArrayList<>();
+        for (Friends friends: list){
+            dtos.add(FriendTOInfo(friends));
+        }
+        return dtos;
+    }
+
+
+    public static MemberInfoResponseDTO FriendWhoGiveMePendingInfo(Friends friends){
+        return MemberInfoResponseDTO.builder()
+                .id(friends.getMember().getId())
+                .nickname(friends.getMember().getNickname())
+                .build();
+    }
+
+    public static List<MemberInfoResponseDTO> FriendWhoGiveMePendingInfoList(List<Friends> list){
+        List<MemberInfoResponseDTO> dtos = new ArrayList<>();
+        for (Friends friends: list){
+            dtos.add(FriendWhoGiveMePendingInfo(friends));
         }
         return dtos;
     }

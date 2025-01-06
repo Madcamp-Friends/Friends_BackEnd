@@ -77,4 +77,18 @@ public class MemberController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/user/me")
+    public ResponseEntity<MemberInfoResponseDTO> getCurrentUser(HttpSession session) {
+        try {
+            String nickname = (String) session.getAttribute("nickname");
+            System.out.println("HEEJU get user" + nickname);
+            Member member = memberRepository.findByNickname(nickname).orElseThrow(()->new IllegalArgumentException("no member"));
+            MemberInfoResponseDTO result = MemberInfoResponseDTO.memberTOInfo(member);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }
