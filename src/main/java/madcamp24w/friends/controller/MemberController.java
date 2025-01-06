@@ -8,10 +8,9 @@ import madcamp24w.friends.DTO.MemberRegisterDTO;
 import madcamp24w.friends.entity.Member;
 import madcamp24w.friends.repository.MemberRepository;
 import madcamp24w.friends.service.MemberService;
-import org.aspectj.apache.bcel.Repository;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import madcamp24w.friends.service.BrainCreateService;
 
 import java.util.List;
 
@@ -23,6 +22,7 @@ public class MemberController {
 
     private final MemberRepository memberRepository;
     private final MemberService memberService;
+    private final BrainCreateService brainCreateService;
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String nickname, @RequestParam String password, HttpSession session) {
@@ -39,8 +39,10 @@ public class MemberController {
 
     @PostMapping("/create-account")
     public ResponseEntity<String> createAccount(
-            @RequestBody MemberRegisterDTO dto) {
+            @RequestBody MemberRegisterDTO dto, HttpSession session) {
         try {
+            String nickname = dto.getNickname();
+            session.setAttribute("nickname",nickname);
             memberService.createAccount(dto);
             return ResponseEntity.ok("Account created");
         } catch (IllegalArgumentException e) {
