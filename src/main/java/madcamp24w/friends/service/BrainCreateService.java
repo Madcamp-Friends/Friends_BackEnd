@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import madcamp24w.friends.DTO.BrainCreateDTO;
 import madcamp24w.friends.DTO.BrainCreateResponseDTO;
+import madcamp24w.friends.DTO.BrainEditLabelDTO;
 import madcamp24w.friends.DTO.LabelDTO;
 import madcamp24w.friends.entity.BrainCreate;
 import madcamp24w.friends.entity.Label;
@@ -74,6 +75,18 @@ public class BrainCreateService {
 
         List<Label> result = labelRepository.findAllByBrain_Id(brain.getId());
         return LabelDTO.LabelInfo(result);
+
+    }
+
+    public LabelDTO editBrainLabel(Long id, BrainEditLabelDTO dto){
+        Label label = labelRepository.findById(id).orElseThrow(()->new IllegalArgumentException("No such Label"));
+        if (!dto.getLabel().isEmpty()){
+            label.setLabelName(dto.getLabel());
+            label = labelRepository.save(label);
+        }
+
+        return LabelDTO.builder().labelId(id).labelTopic(label.getLabelName()).build();
+
 
     }
 

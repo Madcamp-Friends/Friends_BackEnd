@@ -2,10 +2,7 @@ package madcamp24w.friends.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import madcamp24w.friends.DTO.BrainCreateDTO;
-import madcamp24w.friends.DTO.BrainCreateResponseDTO;
-import madcamp24w.friends.DTO.LabelDTO;
-import madcamp24w.friends.DTO.MemberRegisterDTO;
+import madcamp24w.friends.DTO.*;
 import madcamp24w.friends.entity.BrainCreate;
 import madcamp24w.friends.entity.Member;
 import madcamp24w.friends.service.BrainCreateService;
@@ -55,6 +52,17 @@ public class BrainCreateController {
     public ResponseEntity<List<LabelDTO>> getIFriendBrain(@PathVariable(name="id") Long id){
         try{
             List<LabelDTO> result = brainCreateService.getFriendBrain(id);
+            return ResponseEntity.ok(result);
+        } catch (Exception e){
+            return null;
+        }
+
+    }
+
+    @PostMapping("/edit/{id}")
+    public ResponseEntity<LabelDTO> editBrainLabel(@PathVariable(name="id") Long id, @RequestBody BrainEditLabelDTO edit){
+        try{
+            LabelDTO result = brainCreateService.editBrainLabel(id, edit);
             return ResponseEntity.ok(result);
         } catch (Exception e){
             return null;
