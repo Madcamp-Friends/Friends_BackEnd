@@ -39,8 +39,10 @@ public class MemberController {
 
     @PostMapping("/create-account")
     public ResponseEntity<String> createAccount(
-            @RequestBody MemberRegisterDTO dto) {
+            @RequestBody MemberRegisterDTO dto, HttpSession session) {
         try {
+            String nickname = dto.getNickname();
+            session.setAttribute("nickname",nickname);
             memberService.createAccount(dto);
             return ResponseEntity.ok("Account created");
         } catch (IllegalArgumentException e) {
