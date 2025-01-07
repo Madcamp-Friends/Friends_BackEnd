@@ -26,7 +26,6 @@ public class BrainCreateService {
     private final MemberRepository memberRepository;
     private final LabelRepository labelRepository;
 
-    // Create a new Brain
     @Transactional
     public BrainCreate createBrain(String nickname, BrainCreateDTO dto) {
         Member member = memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("NO Member"));
@@ -86,25 +85,28 @@ public class BrainCreateService {
         }
 
         return LabelDTO.builder().labelId(id).labelTopic(label.getLabelName()).build();
-
-
     }
-
-    // Add a label to a Brain
-    /*@Transactional
-    public void addLabel(String nickname, String label) {
-        BrainCreate brainCreate = getBrain(nickname);
-        if (!brainCreate.getLabels().contains(label)) {
-            brainCreate.getLabels().add(label);
+    @Transactional
+    public LabelDTO addLabel(String label, String nickname) {
+        Member member = memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("no member"));
+        BrainCreate brain = brainCreateRepository.findByMemberId(member.getId()).orElseThrow();
+        Label newLabel = Label.builder()
+                .labelName(label)
+                .brain(brain)
+                .build();
+        labelRepository.save(newLabel);
+        return LabelDTO.builder()
+                .labelId(newLabel.getId())
+                .labelTopic(newLabel.getLabelName())
+                .build();
         }
-    }*/
 
-    // Remove a label from a Brain
-//    @Transactional
-//    public void removeLabel(String nickname, String label) {
-//        BrainCreate brainCreate = getBrain(nickname);
-//        if (brainCreate.getLabels().contains(label)) {
-//            brainCreate.getLabels().remove(label);
-//        }
-//    }
+    @Transactional
+    public void removeLabel(Long id) {
+        Label label = labelRepository.findById(id).orElseThrow();
+        labelRepository.delete(label);
+    }
 }
+
+
+

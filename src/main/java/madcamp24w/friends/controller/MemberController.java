@@ -56,9 +56,11 @@ public class MemberController {
     }
 
     @GetMapping("/members")
-    public ResponseEntity<?> getAllMembers() {
+    public ResponseEntity<?> getAllMembers(HttpSession session) {
+        String nickname = (String) session.getAttribute("nickname");
+        Member member = memberRepository.findByNickname(nickname).orElseThrow();
         try {
-            List<Member> members = memberRepository.findAll();
+            List<Member> members = memberRepository.findByIdNot(member.getId());
             List<MemberInfoResponseDTO> result = MemberInfoResponseDTO.memberInfoResponseDTOList(members);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
@@ -96,6 +98,14 @@ public class MemberController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteMember(@PathVariable(name="id") Long id){
+        Member member = memberRepository.findById(id).orElseThrow();
+        memberRepository.delete(member);
+        return "삭제";
+    }
+
+
     @PostMapping("/change/nickname")
     public ResponseEntity<?> changeUsername(@RequestBody MemberInfoRequestNickDTO dto, HttpSession session) {
         String oldNickname = (String) session.getAttribute("nickname");
@@ -131,4 +141,5 @@ public class MemberController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 }

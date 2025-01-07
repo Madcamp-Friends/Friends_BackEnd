@@ -32,7 +32,6 @@ public class BrainCreateController {
             return null;
             //return ResponseEntity.badRequest().body("nickname error");
         }
-
     }
 
     @GetMapping("/getMyBrain")
@@ -44,7 +43,6 @@ public class BrainCreateController {
         } catch (Exception e){
             return null;
         }
-
     }
 
     // 친구 리스트에서 친구 id 가져오면 id 연결할 수 있을 듯?
@@ -56,7 +54,6 @@ public class BrainCreateController {
         } catch (Exception e){
             return null;
         }
-
     }
 
     @PostMapping("/edit/{id}")
@@ -70,26 +67,17 @@ public class BrainCreateController {
 
     }
 
+    @PostMapping("/add/label")
+    public ResponseEntity<LabelDTO> addLabel(@RequestParam String labelName, HttpSession session) {
+        String nickname = (String) session.getAttribute("nickname");
+        LabelDTO result = brainCreateService.addLabel(labelName, nickname);
+        return ResponseEntity.ok(result);
+    }
+    @DeleteMapping("/label")
+    public ResponseEntity<String> removeLabel(@RequestParam(name="id") Long id) {
+        brainCreateService.removeLabel(id);
+        return ResponseEntity.ok("id = ${id} 삭제 완료");
+    }
 
-    // Add a label to a brain
-//    @PostMapping("/{brainnickname}/labels_add")
-//    public void addlabel(@PathVariable String nickname, @RequestParam String label) {
-//        brainCreateService.addLabel(nickname, label);
-//    }
-
-    // Remove a label from a brain
-//    @DeleteMapping("/{brainnickname}/labels_delete")
-//    public void removelabel(@PathVariable String nickname, @RequestParam String label) {
-//        brainCreateService.removeLabel(nickname, label);
-//    }
-//    @GetMapping("/{nickname}/labels")
-//    public BrainCreate getlabel(HttpSession session) {
-//        String nickname = (String) session.getAttribute("nickname");
-//        if(nickname!=null){
-//            return brainCreateService.getBrain(nickname);
-//        }else{
-//            throw new IllegalArgumentException("nickname error");
-//        }
-//    }
 }
 
