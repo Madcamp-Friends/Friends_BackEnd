@@ -52,11 +52,9 @@ public class FriendService {
         Member fromMember = memberRepository.findByNickname(nickname).orElseThrow(()-> new IllegalArgumentException("Does not exist"));
         Member toMember = memberRepository.findById(dto.getToId()).orElseThrow(()->new IllegalArgumentException("Does not exist"));
 
-        if (friendRepository.existsByMemberAndFriend(fromMember, toMember)){
-            Friends friend = friendRepository.findFriendsByMemberAndFriend(fromMember, toMember);
-            friend.setStatus(FriendStatus.REJECTED);
-            friendRepository.save(friend);
-        }
+        Friends friend = friendRepository.findFriendshipBetweenMembersAndEnd(fromMember.getId(), toMember.getId()).orElseThrow(() -> new IllegalArgumentException("No friendship exists"));
+        friend.setStatus(FriendStatus.REJECTED);
+        friendRepository.save(friend);
     }
 
     // 로그인한 멤버인지 체크 - session으로 get한게 memberId인지 체크하고 if로 상황에 따라서 리턴하는 Response다르게 하기
@@ -82,8 +80,5 @@ public class FriendService {
 
         return friendList;
     }
-
-
-
 
 }

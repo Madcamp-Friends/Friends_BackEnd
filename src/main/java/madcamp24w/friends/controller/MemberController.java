@@ -91,4 +91,11 @@ public class MemberController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteMember(@PathVariable(name="id") Long id){
+        Member member = memberRepository.findById(id).orElseThrow();
+        memberRepository.delete(member);
+        return "삭제";
+    }
+
 }
