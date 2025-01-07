@@ -3,6 +3,9 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 import madcamp24w.friends.DTO.ErrorResponseDTO;
+import madcamp24w.friends.DTO.MemberInfoRequestPassDTO;
+import madcamp24w.friends.DTO.MemberInfoRequestMailDTO;
+import madcamp24w.friends.DTO.MemberInfoRequestNickDTO;
 import madcamp24w.friends.DTO.MemberInfoResponseDTO;
 import madcamp24w.friends.DTO.MemberRegisterDTO;
 import madcamp24w.friends.entity.Member;
@@ -11,6 +14,7 @@ import madcamp24w.friends.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import madcamp24w.friends.service.BrainCreateService;
+import madcamp24w.friends.service.MemberInfoService;
 
 import java.util.List;
 
@@ -23,6 +27,7 @@ public class MemberController {
     private final MemberRepository memberRepository;
     private final MemberService memberService;
     private final BrainCreateService brainCreateService;
+    private final MemberInfoService memberInfoService;
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String nickname, @RequestParam String password, HttpSession session) {
@@ -98,6 +103,43 @@ public class MemberController {
         Member member = memberRepository.findById(id).orElseThrow();
         memberRepository.delete(member);
         return "삭제";
+    }
+
+
+    @PostMapping("/change/nickname")
+    public ResponseEntity<?> changeUsername(@RequestBody MemberInfoRequestNickDTO dto, HttpSession session) {
+        String oldNickname = (String) session.getAttribute("nickname");
+        try{
+            memberInfoService.nicknameEdit(oldNickname,dto.getNickname());
+            session.setAttribute("nickname",dto.getNickname());
+            return ResponseEntity.ok("Nickname changed successfully");
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @PostMapping("/change/email")
+    public ResponseEntity<?> changeEmail(@RequestBody MemberInfoRequestMailDTO dto, HttpSession session) {
+        String oldNickname=(String) session.getAttribute("nickname");
+        try{
+            memberInfoService.emailEdit(oldNickname,dto.getEmail());
+            return ResponseEntity.ok("Email changed successfully");
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @PostMapping("/change/password")
+    public ResponseEntity<?> changePassword(@RequestBody MemberInfoRequestPassDTO dto, HttpSession session) {
+        String oldNickname=(String) session.getAttribute("nickname");
+        try{
+            boolean truth=memberInfoService.passwordEdit(oldNickname,dto.getPassword(), dto.getNewpassword());
+            if(truth){
+                return ResponseEntity.ok("Password changed successfully");
+            }else{
+                return ResponseEntity.badRequest().body("Wrong password");
+            }
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }
