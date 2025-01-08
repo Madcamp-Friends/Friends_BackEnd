@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import madcamp24w.friends.service.BrainCreateService;
 import madcamp24w.friends.service.MemberInfoService;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -139,6 +142,20 @@ public class MemberController {
             }
         }catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @GetMapping("/get/info")
+    public ResponseEntity<Map<String,String>> getCurrentUserInfo(HttpSession session) {
+        try {
+            String nickname = (String) session.getAttribute("nickname");
+            System.out.println("HEEJU get user" + nickname);
+            Member member = memberRepository.findByNickname(nickname).orElseThrow(()->new IllegalArgumentException("no member"));
+            Map<String,String> result=new HashMap<>();
+            result.put("nickname", member.getNickname());
+            result.put("email", member.getEmail());
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return null;
         }
     }
 
